@@ -19,21 +19,23 @@ export function Incentives() {
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {incentives.cards.map((card, i) => (
             <FadeIn key={card.title} delayMs={i * 80}>
-              <article className="relative h-full rounded-2xl border border-slate-200/80 bg-white p-6 pt-7 shadow-sm">
-                <span className="absolute top-5 right-5 rounded-full bg-accent-soft px-2.5 py-1 text-[11px] font-semibold text-accent-dark">
-                  {card.tag}
-                </span>
-                <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft text-accent-dark">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
-                    <path
-                      d="M12 3v18M7 8h7a3 3 0 010 6H9"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <h3 className="pr-24 font-display text-lg font-semibold text-navy">
+              <article className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft text-accent-dark">
+                    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
+                      <path
+                        d="M12 3v18M7 8h7a3 3 0 010 6H9"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <span className="rounded-full bg-accent-soft px-2.5 py-1 text-[11px] font-semibold text-accent-dark">
+                    {card.tag}
+                  </span>
+                </div>
+                <h3 className="font-display text-lg font-semibold text-navy">
                   {card.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-slate-600">

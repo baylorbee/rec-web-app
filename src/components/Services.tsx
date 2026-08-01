@@ -57,7 +57,7 @@ export function Services() {
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {services.cards.map((card, i) => (
             <FadeIn key={card.id} delayMs={i * 100}>
-              <article className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-7 shadow-sm">
+              <article className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent-soft text-accent-dark">
                   {card.widget === "thermostat" ? (
                     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>

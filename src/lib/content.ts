@@ -8,36 +8,29 @@ export const site = {
   name: "Refine Energy Consulting",
   shortName: "REC",
   tagline: "Building energy optimization for small commercial properties.",
-  serviceArea: "Sacramento, CA and surrounding areas",
-  contact: {
-    email: "hello@refineenergy.example", // placeholder
-    phone: "(916) 555-0142", // placeholder
-  },
 } as const;
 
 export const nav = {
   links: [
-    { label: "Services", href: "#services" },
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "Case Study", href: "#case-study" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "Services", href: "/#services" },
+    { label: "How it Works", href: "/#how-it-works" },
+    { label: "Savings Calculator", href: "/#roi-calculator" },
+    { label: "About us", href: "/about" },
   ],
-  cta: { label: "Get Free Assessment", href: "#contact" },
+  cta: { label: "Get Free Assessment", href: "/#contact" },
 } as const;
 
 export const hero = {
-  headline:
-    "Cut building energy waste without replacing the entire HVAC system.",
+  headline: "Reclaim Your Energy.",
   supporting:
-    "We audit your HVAC controls, install the right solution for your building type, and keep optimizing — so Sacramento property owners keep the savings month after month.",
-  primaryCta: { label: "Get a Free Energy Assessment", href: "#contact" },
-  secondaryCta: { label: "See How It Works", href: "#how-it-works" },
+    "Most commercial buildings waste 30% of their energy. We fix the controls, optimize the schedules, and monitor the systems—so you keep the savings, month after month.",
+  primaryCta: { label: "Get a Free Energy Assessment", href: "/#contact" },
+  secondaryCta: { label: "See How It Works", href: "/#how-it-works" },
   badges: [
-    { label: "Up to 30% savings potential", note: "DOE commercial waste estimate" },
+    { label: "Up to 30% savings", note: "DOE commercial waste estimate" },
     { label: "24/7 monitoring", note: "pptx" },
     { label: "No equipment swap", note: "pptx" },
-    { label: "Typical one-day install", note: "pptx — smart thermostat path" },
+    { label: "1-day install", note: "pptx — smart thermostat path" },
   ],
 } as const;
 
@@ -258,19 +251,84 @@ export const founder = {
   intro:
     "Refine Energy Consulting was founded on a simple observation: small commercial buildings waste enormous amounts of energy, and nobody with the right technical skills is focused on fixing it.",
   name: "Matthew Allen Reed",
-  title: "Founder & Principal Engineer",
+  title: "Founder & Mechanical Engineer",
+  photo: {
+    src: "/matt.png",
+    alt: "Matthew Reed, E.I.T., Founder of Refine Energy Consulting",
+  },
   bio: [
-    "Matthew is a BAS consultant with hands-on programming experience on Distech and DeltaV building automation systems — the platforms common in the Sacramento commercial market.",
-    "He is an Engineer-in-Training (E.I.T.) pursuing PE licensure in HVAC & Refrigeration, bringing credentials most local HVAC contractors and many “energy” vendors simply do not have.",
-    "The gap he saw: buildings roughly 5,000–80,000 sq ft are too small for giants like Johnson Controls or Siemens, yet too technical for general contractors who only fix broken equipment.",
+    "Matthew Reed, E.I.T., is a mechanical engineer focused on controls. He studied mechanical engineering at San Francisco State University and builds on hands-on experience with AutoCAD, MATLAB, and building automation platforms common in the Sacramento market — including Distech and DeltaV systems.",
+    "As Controls System Administrator at Stanford and through engineering work with CON-QUEST Contractors, he spent years inside real commercial facilities — programming, commissioning, and keeping HVAC controls running — rather than selling from a brochure.",
+    "The gap he saw: buildings roughly 5,000–80,000 sq ft (strip malls, medical offices, small professional buildings) are too small for giants like Johnson Controls or Siemens, yet too technical for local HVAC contractors who mainly fix broken equipment. Energy waste fills that middle.",
     "Before taking clients, he validated pricing, savings estimates, and verification methods against real Sacramento-area properties using public county and listing data — including the illustrative Rosemont Plaza analysis on this site.",
   ],
   credentials: [
     "E.I.T. — HVAC & Refrigeration",
     "Distech + DeltaV BAS",
-    "Controls programming & commissioning",
-    "Sacramento commercial focus",
+    "Stanford Controls",
+    "SFSU Mechanical Engineering",
   ],
+} as const;
+
+export const team = {
+  headline: "Meet the team",
+  members: [
+    {
+      name: "Vidit Katyal",
+      role: "Sales",
+      photo: {
+        src: "/vidit.jpeg",
+        alt: "Vidit Katyal, Sales at Refine Energy Consulting",
+      },
+    },
+    {
+      name: "Sarvesh K.",
+      role: "Engineering",
+      photo: {
+        src: "/sarvesh.jpeg",
+        alt: "Sarvesh K., Engineering at Refine Energy Consulting",
+      },
+    },
+  ],
+} as const;
+
+/**
+ * Illustrative ROI calculator — formulas calibrated to Rosemont Plaza PPTX analysis.
+ * Default inputs ($3,000 bill, 45% HVAC) → ~9% bill reduction / ~$3,240 annual,
+ * i.e. ~20% of HVAC spend (between PPTX conservative 15% and realistic 23%).
+ */
+export const roiCalculator = {
+  eyebrow: "ROI Calculator",
+  headline: "See Your Potential Savings",
+  disclaimer:
+    "Based on Rosemont Plaza illustrative analysis (conservative–realistic blend). Actual results depend on building type, lease structure, and current controls.",
+  cta: { label: "Get a Free Assessment", href: "/#contact" },
+  defaults: {
+    monthlyBill: 3000,
+    units: 6,
+    hvacPct: 45,
+  },
+  ranges: {
+    monthlyBill: { min: 500, max: 20000, step: 100 },
+    units: { min: 1, max: 40, step: 1 },
+  },
+  hvacPctOptions: [30, 40, 45, 50, 60] as const,
+  /** Fraction of HVAC electric spend saved — between PPTX 15% floor and 23% realistic */
+  savingsRateOfHvac: 0.2,
+  /**
+   * Illustrative net project cost per RTU after ~$75 SMUD rebate/unit.
+   * Derived from PPTX ~$1,780 / 3 units ≈ $593 gross → ~$518 net.
+   */
+  netProjectCostPerUnit: Math.round(1780 / 3 - 75),
+  labels: {
+    monthlyBill: "Monthly Electric Bill",
+    units: "Number of Rooftop Units",
+    hvacPct: "HVAC % of Electric Bill",
+    annualSavings: "Estimated Annual Savings",
+    monthlySavings: "Monthly savings",
+    billReduction: "Bill reduction",
+    payback: "Estimated payback",
+  },
 } as const;
 
 export const faq = {
@@ -292,10 +350,6 @@ export const faq = {
     {
       q: "Who does the physical installation?",
       a: "A licensed, insured C-7 contractor handles wiring and physical install. REC owns programming, commissioning, and ongoing optimization.",
-    },
-    {
-      q: "Is Rosemont Plaza a past client?",
-      a: "No. Rosemont Plaza figures on this site are an illustrative internal analysis used to validate the model — clearly labeled as such, not a completed engagement.",
     },
   ],
 } as const;
@@ -329,28 +383,7 @@ export const bottomCta = {
   headline: "Stop paying for wasted energy.",
   supporting:
     "Find out how much your Sacramento-area building could save — free assessment, no obligation.",
-  cta: { label: "Get Your Free Assessment", href: "#contact" },
+  cta: { label: "Get Your Free Assessment", href: "/#contact" },
   notes: ["No equipment replacement", "Typical one-day install", "Cancel monitoring anytime"],
 } as const;
 
-export const footer = {
-  blurb: "Sacramento commercial HVAC controls optimization for small and midsize property owners.",
-  columns: [
-    {
-      title: "Explore",
-      links: [
-        { label: "Services", href: "#services" },
-        { label: "How It Works", href: "#how-it-works" },
-        { label: "Case Study", href: "#case-study" },
-      ],
-    },
-    {
-      title: "Company",
-      links: [
-        { label: "About", href: "#about" },
-        { label: "Contact", href: "#contact" },
-        { label: "FAQ", href: "#faq" },
-      ],
-    },
-  ],
-} as const;

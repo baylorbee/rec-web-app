@@ -57,7 +57,7 @@ export function Benefits() {
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.items.map((item, i) => (
             <FadeIn key={item.title} delayMs={(i % 4) * 60}>
-              <article className="h-full rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
+              <article className="h-full rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
                 <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft text-accent-dark">
                   {benefitIcons[i]}
                 </span>

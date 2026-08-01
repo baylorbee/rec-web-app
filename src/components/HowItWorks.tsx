@@ -16,15 +16,15 @@ export function HowItWorks() {
           </div>
         </FadeIn>
 
-        <ol className="relative mt-14 grid gap-8 md:grid-cols-3 md:gap-6">
+        <ol className="relative mt-12 grid grid-cols-1 gap-10 sm:mt-14 md:grid-cols-3 md:gap-6">
           <div
             className="pointer-events-none absolute top-8 right-[16%] left-[16%] hidden h-px border-t border-dashed border-slate-300 md:block"
             aria-hidden
           />
           {howItWorks.steps.map((step, i) => (
             <FadeIn key={step.number} delayMs={i * 90}>
-              <li className="relative text-center md:px-2">
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-accent/25 bg-accent-soft font-display text-sm font-bold text-accent-dark shadow-sm">
+              <li className="relative mx-auto max-w-sm text-center md:mx-0 md:max-w-none md:px-2">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-accent/25 bg-accent-soft font-display text-sm font-bold text-accent-dark shadow-sm md:mb-5">
                   {step.number}
                 </div>
                 <h3 className="font-display text-lg font-semibold text-navy">

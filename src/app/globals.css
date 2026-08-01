@@ -28,6 +28,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -48,6 +49,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: clip;
 }
 
 .font-display {
@@ -68,7 +70,7 @@ body {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-4px);
   }
 }
 
@@ -76,6 +78,225 @@ body {
   animation: float 7s ease-in-out infinite;
 }
 
+/* ── Hero logo: circuit-draw (top → sides → REC → outline pulse) ── */
+/*
+  pathLength="1" on SVG strokes → dasharray/offset use unit length 1.
+  Default (pre-hydrate): strokes hidden so we never flash the final mark then rewind.
+  Pulse is stroke-only (no fill wash / drop-shadow glow that floods the cube).
+  ~2.4s total: smoother draw, then a brief accent stroke flash on outlines.
+*/
+.rec-logo-hero:not(.rec-logo-hero--settled) .rec-logo__stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.rec-logo-hero:not(.rec-logo-hero--settled) .rec-logo__dot,
+.rec-logo-hero:not(.rec-logo-hero--settled) .rec-logo__mark {
+  opacity: 0;
+}
+
+.rec-logo-hero--animate .rec-logo__stroke {
+  animation:
+    rec-logo-draw 1s cubic-bezier(0.45, 0.05, 0.25, 1) forwards,
+    rec-logo-stroke-pulse 0.7s ease-in-out forwards;
+}
+
+.rec-logo-hero--animate .rec-logo__stroke--top {
+  animation-delay: 0s, 1.55s;
+}
+
+.rec-logo-hero--animate .rec-logo__stroke--sides {
+  animation-delay: 0.5s, 1.55s;
+}
+
+.rec-logo-hero--animate .rec-logo__dot {
+  animation: rec-logo-dot-in 0.5s ease-in-out 0.4s forwards;
+}
+
+.rec-logo-hero--animate .rec-logo__mark {
+  animation: rec-logo-mark-in 0.55s ease-in-out 1.15s forwards;
+}
+
+.rec-logo-hero--settled .rec-logo__stroke {
+  stroke-dashoffset: 0;
+}
+
+.rec-logo-hero--settled .rec-logo__dot,
+.rec-logo-hero--settled .rec-logo__mark {
+  opacity: 1;
+}
+
+@keyframes rec-logo-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Outline-only: accent flash on stroke color + slight width, no fill/glow */
+@keyframes rec-logo-stroke-pulse {
+  0% {
+    stroke: #163a32;
+    stroke-opacity: 1;
+  }
+  40% {
+    stroke: var(--accent);
+    stroke-opacity: 1;
+  }
+  100% {
+    stroke: #163a32;
+    stroke-opacity: 1;
+  }
+}
+
+@keyframes rec-logo-dot-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rec-logo-mark-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-logo-hero .rec-logo__stroke {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+
+  .rec-logo-hero .rec-logo__dot,
+  .rec-logo-hero .rec-logo__mark {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}
+
+@media (scripting: none) {
+  .rec-logo-hero .rec-logo__stroke {
+    stroke-dashoffset: 0;
+  }
+
+  .rec-logo-hero .rec-logo__dot,
+  .rec-logo-hero .rec-logo__mark {
+    opacity: 1;
+  }
+}
+
+/* ROI range sliders — accent thumb, soft track */
+.roi-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: #dce8e3;
+  outline: none;
+}
+
+.roi-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(11, 31, 51, 0.25);
+  cursor: pointer;
+}
+
+.roi-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(11, 31, 51, 0.25);
+  cursor: pointer;
+}
+
+.roi-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #dce8e3;
+}
+
 ::selection {
   background: rgba(31, 168, 122, 0.22);
+}
+
+/*
+  Header: keep hamburger through tablet widths.
+  At 640–1023px, absolute-centered links + wordmark + CTA collide;
+  desktop chrome only from lg (1024px).
+*/
+.rec-desktop-nav {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.rec-desktop-cta {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #0a0a0a;
+  padding: 0.625rem 1.25rem;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.rec-desktop-cta:hover {
+  background: #262626;
+}
+
+.rec-mobile-toggle {
+  display: inline-flex;
+}
+
+.rec-mobile-drawer {
+  display: block;
+  max-height: calc(100dvh - 4.25rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 1024px) {
+  .rec-desktop-nav {
+    display: flex !important;
+    gap: 1.75rem;
+  }
+
+  .rec-desktop-cta {
+    display: inline-flex !important;
+  }
+
+  .rec-mobile-toggle {
+    display: none !important;
+  }
+
+  .rec-mobile-drawer {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rec-desktop-nav {
+    gap: 2rem;
+  }
 }

@@ -9,11 +9,11 @@ export function CaseStudy() {
         <FadeIn>
           <div className="max-w-2xl">
             <SectionLabel>{caseStudy.eyebrow}</SectionLabel>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <h2 className="font-display text-3xl font-bold tracking-tight text-navy sm:text-4xl">
                 {caseStudy.headline}
               </h2>
-              <span className="rounded-full border border-amber-300/70 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
+              <span className="inline-block max-w-full rounded-full border border-amber-300/70 bg-amber-50 px-3 py-1 text-left text-xs font-semibold leading-snug text-amber-800">
                 {caseStudy.badge}
               </span>
             </div>
@@ -26,7 +26,7 @@ export function CaseStudy() {
         <FadeIn delayMs={80}>
           <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="border-b border-slate-200 p-7 lg:border-r lg:border-b-0">
+              <div className="border-b border-slate-200 p-5 sm:p-7 lg:border-r lg:border-b-0">
                 <p className="text-xs font-semibold tracking-[0.14em] text-slate-400 uppercase">
                   Building profile
                 </p>
@@ -58,7 +58,7 @@ export function CaseStudy() {
                 </dl>
               </div>
 
-              <div className="bg-[linear-gradient(160deg,#F0F9F5_0%,#FFFFFF_55%)] p-7">
+              <div className="bg-[linear-gradient(160deg,#F0F9F5_0%,#FFFFFF_55%)] p-5 sm:p-7">
                 <p className="text-xs font-semibold tracking-[0.14em] text-accent-dark uppercase">
                   Illustrative savings scenarios
                 </p>
@@ -81,7 +81,7 @@ export function CaseStudy() {
                 </div>
               </div>
             </div>
-            <p className="border-t border-slate-200 bg-slate-50 px-7 py-4 text-xs leading-relaxed text-slate-500">
+            <p className="border-t border-slate-200 bg-slate-50 px-5 py-4 text-xs leading-relaxed text-slate-500 sm:px-7">
               {caseStudy.note}
             </p>
           </div>

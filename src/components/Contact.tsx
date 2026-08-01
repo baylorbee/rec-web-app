@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { contact, site } from "@/lib/content";
+import { contact } from "@/lib/content";
 import { Container, SectionLabel } from "./ui";
 import { FadeIn } from "./FadeIn";
 
@@ -30,7 +30,10 @@ export function Contact() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>(
     {},
   );
-  const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "ok" | "error">(
+    "idle",
+  );
+  const [serverError, setServerError] = useState("");
 
   function validate(values: FormState) {
     const next: Partial<Record<keyof FormState, string>> = {};
@@ -40,45 +43,55 @@ export function Contact() {
       next.email = "Enter a valid email";
     if (!values.phone.trim()) next.phone = "Phone is required";
     if (!values.city.trim()) next.city = "Building city is required";
-    if (!values.sqft) next.sqft = "Select approximate square footage";
-    if (!values.propertyType) next.propertyType = "Select a property type";
     return next;
   }
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     const next = validate(form);
     setErrors(next);
+    setServerError("");
+
     if (Object.keys(next).length) {
       setStatus("error");
       return;
     }
 
-    // No backend yet — log + mailto fallback for demo
-    console.info("[REC contact form]", form);
-    const subject = encodeURIComponent(
-      `Assessment request — ${form.name} (${form.city})`,
-    );
-    const body = encodeURIComponent(
-      [
-        `Name: ${form.name}`,
-        `Email: ${form.email}`,
-        `Phone: ${form.phone}`,
-        `Building city: ${form.city}`,
-        `Approx. sq ft: ${form.sqft}`,
-        `Property type: ${form.propertyType}`,
-        "",
-        form.message || "(no message)",
-      ].join("\n"),
-    );
-    window.location.href = `mailto:${site.contact.email}?subject=${subject}&body=${body}`;
-    setStatus("ok");
-    setForm(initial);
+    setStatus("submitting");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+      };
+
+      if (!res.ok) {
+        setServerError(
+          data.error ||
+            "Something went wrong sending your request. Please try again.",
+        );
+        setStatus("error");
+        return;
+      }
+
+      setStatus("ok");
+      setForm(initial);
+    } catch {
+      setServerError(
+        "Network error — please check your connection and try again.",
+      );
+      setStatus("error");
+    }
   }
 
   const field =
-    "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-navy shadow-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20";
-  const label = "mb-1.5 block text-xs font-semibold tracking-wide text-slate-600";
+    "w-full min-w-0 rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-navy shadow-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20";
+  const label =
+    "mb-1.5 block text-xs font-semibold tracking-wide text-slate-600";
 
   return (
     <section id="contact" className="py-16 sm:py-20">
@@ -93,35 +106,6 @@ export function Contact() {
               <p className="mt-4 text-base leading-relaxed text-slate-600">
                 {contact.intro}
               </p>
-              <dl className="mt-8 space-y-4 text-sm">
-                <div>
-                  <dt className="font-medium text-navy">Email</dt>
-                  <dd className="text-slate-600">
-                    <a
-                      href={`mailto:${site.contact.email}`}
-                      className="hover:text-accent-dark"
-                    >
-                      {site.contact.email}
-                    </a>
-                    <span className="ml-2 text-xs text-slate-400">
-                      (placeholder)
-                    </span>
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-medium text-navy">Phone</dt>
-                  <dd className="text-slate-600">
-                    {site.contact.phone}
-                    <span className="ml-2 text-xs text-slate-400">
-                      (placeholder)
-                    </span>
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-medium text-navy">Service area</dt>
-                  <dd className="text-slate-600">{site.serviceArea}</dd>
-                </div>
-              </dl>
             </div>
           </FadeIn>
 
@@ -129,10 +113,10 @@ export function Contact() {
             <form
               onSubmit={onSubmit}
               noValidate
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8"
             >
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="sm:col-span-1">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="min-w-0">
                   <label htmlFor="name" className={label}>
                     Name
                   </label>
@@ -150,7 +134,7 @@ export function Contact() {
                     <p className="mt-1 text-xs text-red-600">{errors.name}</p>
                   )}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="email" className={label}>
                     Email
                   </label>
@@ -169,7 +153,7 @@ export function Contact() {
                     <p className="mt-1 text-xs text-red-600">{errors.email}</p>
                   )}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="phone" className={label}>
                     Phone
                   </label>
@@ -188,7 +172,7 @@ export function Contact() {
                     <p className="mt-1 text-xs text-red-600">{errors.phone}</p>
                   )}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="city" className={label}>
                     Building city
                   </label>
@@ -205,9 +189,9 @@ export function Contact() {
                     <p className="mt-1 text-xs text-red-600">{errors.city}</p>
                   )}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="sqft" className={label}>
-                    Approximate square footage
+                    Approx. sq ft (optional)
                   </label>
                   <select
                     id="sqft"
@@ -229,9 +213,9 @@ export function Contact() {
                     <p className="mt-1 text-xs text-red-600">{errors.sqft}</p>
                   )}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="propertyType" className={label}>
-                    Property type
+                    Property type (optional)
                   </label>
                   <select
                     id="propertyType"
@@ -274,22 +258,31 @@ export function Contact() {
 
               <button
                 type="submit"
-                className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-light sm:w-auto"
+                disabled={status === "submitting"}
+                className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               >
-                Submit assessment request
+                {status === "submitting"
+                  ? "Sending…"
+                  : "Submit assessment request"}
               </button>
 
               {status === "ok" && (
                 <p className="mt-3 text-sm text-accent-dark" role="status">
-                  Thanks — your email client should open with the details. We’ll
-                  follow up soon.
+                  Thanks — your request was sent. We&apos;ll follow up soon.
                 </p>
               )}
-              {status === "error" && Object.keys(errors).length > 0 && (
+              {status === "error" && serverError && (
                 <p className="mt-3 text-sm text-red-600" role="alert">
-                  Please fix the highlighted fields.
+                  {serverError}
                 </p>
               )}
+              {status === "error" &&
+                !serverError &&
+                Object.keys(errors).length > 0 && (
+                  <p className="mt-3 text-sm text-red-600" role="alert">
+                    Please fix the highlighted fields.
+                  </p>
+                )}
             </form>
           </FadeIn>
         </div>

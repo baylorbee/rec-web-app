@@ -48,9 +48,9 @@ export function Problem() {
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {problem.cards.map((card, i) => (
             <FadeIn key={card.title} delayMs={i * 80}>
-              <article className="h-full rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
+              <article className="h-full rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-4 flex items-start justify-between gap-3">
-                  <h3 className="font-display text-lg font-semibold text-navy">
+                  <h3 className="min-w-0 font-display text-lg font-semibold text-navy">
                     {card.title}
                   </h3>
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-dark">

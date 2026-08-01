@@ -28,7 +28,7 @@ export function FAQ() {
                 <h3>
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-navy sm:px-6 sm:text-base"
+                    className="flex w-full items-start justify-between gap-3 px-4 py-4 text-left text-sm font-semibold text-navy sm:items-center sm:gap-4 sm:px-6 sm:text-base"
                     aria-expanded={isOpen}
                     onClick={() => setOpen(isOpen ? null : i)}
                   >
